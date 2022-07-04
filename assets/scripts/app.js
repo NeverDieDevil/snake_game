@@ -19,37 +19,46 @@ class Game {
     this.gameField = this.canvas.getContext('2d');
     this.snake = snake;
     this.gameField.fillStyle = 'white';
-    this.updateSnakePos(0, 0);
+    this.updateSnakePos([0, 0]);
   }
   moveSnake(event) {
-    switch (event.keyCode) {
-      case 37:
-        console.log(event.keyCode);
-        this.updateSnakePos(-10, 0);
-        break;
-      case 38:
-        console.log(event.keyCode);
-        this.updateSnakePos(0, -10);
-        break;
-      case 39:
-        console.log(event.keyCode);
-        this.updateSnakePos(10, 0);
-        break;
-      case 40:
-        console.log(event.keyCode);
-        this.updateSnakePos(0, 10);
-        break;
-    }
+    clearInterval(idInterval);
+    let previousKey = 28;
+    let idInterval =setInterval(function(){
+      console.log(this);
+      if(!previousKey === event.keyCode){
+        previousKey = event.keyCode;
+      } 
+      switch (previousKey) {
+        case 37:
+          console.log(event.keyCode);
+          this.updateSnakePos([-10, 0]);
+          break;
+        case 38:
+          console.log(event.keyCode);
+          this.updateSnakePos([0, -10]);
+          break;
+        case 39:
+          console.log(event.keyCode);
+          this.updateSnakePos([10, 0]);
+          break;
+        case 40:
+          console.log(event.keyCode);
+          this.updateSnakePos([0, 10]);
+          break;
+      } 
+    }.bind(this), 1000)
   }
-  updateSnakePos(x, y) {
+
+  updateSnakePos(direction) {
     this.gameField.clearRect(
       this.snake.posX,
       this.snake.posY,
       this.snake.width,
       this.snake.height
     );
-    this.snake.posX += x;
-    this.snake.posY += y;
+    this.snake.posX += direction[0];
+    this.snake.posY += direction[1];
     this.gameField.fillRect(
       this.snake.posX,
       this.snake.posY,
@@ -76,4 +85,5 @@ class Snake {
 }
 const snake = new Snake();
 const game = new Game(canvas, snake);
+
 document.addEventListener('keydown', (event) => game.moveSnake(event));
